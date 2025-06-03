@@ -23,6 +23,7 @@
         </attr>
         <attr name="animateScale" format="boolean" />
         <attr name="rubberBandScale" format="boolean" />
+        <attr name="exceedScale" format="boolean" />
         <attr name="threeStepScale" format="boolean" />
         <attr name="limitOffsetWithinBaseVisibleRect" format="boolean" />
         <attr name="readMode" format="enum">

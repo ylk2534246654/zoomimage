@@ -173,6 +173,12 @@ class ZoomableState(val logger: Logger, val layoutDirection: LayoutDirection) : 
     var rubberBandScale: Boolean by mutableStateOf(zoomableCore.rubberBandScale)
 
     /**
+     * If true, when the user zooms to the minimum zoom factor via gesture and continues zooming out,
+     * the content will scale below the component's actual size
+     */
+    var exceedScale: Boolean by mutableStateOf(zoomableCore.exceedScale)
+
+    /**
      * One finger double-click and hold the screen and slide up and down to scale the configuration
      */
     var oneFingerScaleSpec: OneFingerScaleSpec by mutableStateOf(zoomableCore.oneFingerScaleSpec)
@@ -609,6 +615,11 @@ class ZoomableState(val logger: Logger, val layoutDirection: LayoutDirection) : 
         coroutineScope.launch(Dispatchers.Main.immediate) {
             snapshotFlow { rubberBandScale }.collect {
                 zoomableCore.setRubberBandScale(it)
+            }
+        }
+        coroutineScope.launch(Dispatchers.Main.immediate) {
+            snapshotFlow { exceedScale }.collect {
+                zoomableCore.setExceedScale(it)
             }
         }
         coroutineScope.launch(Dispatchers.Main.immediate) {

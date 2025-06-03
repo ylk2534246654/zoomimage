@@ -88,6 +88,8 @@ class ZoomableCore constructor(
         private set
     var rubberBandScale: Boolean = true
         private set
+    var exceedScale: Boolean = false
+        private set
     var oneFingerScaleSpec: OneFingerScaleSpec = OneFingerScaleSpec.Default
         private set
     var animationSpec: BaseZoomAnimationSpec? = null
@@ -458,6 +460,10 @@ class ZoomableCore constructor(
         this.rubberBandScale = rubberBandScale
     }
 
+    fun setExceedScale(exceedScale: Boolean) {
+        this.exceedScale = exceedScale
+    }
+
     fun setOneFingerScaleSpec(oneFingerScaleSpec: OneFingerScaleSpec) {
         this.oneFingerScaleSpec = oneFingerScaleSpec
     }
@@ -669,6 +675,7 @@ class ZoomableCore constructor(
     }
 
     suspend fun rollbackScale(focus: OffsetCompat? = null): Boolean = coroutineScope {
+        if(exceedScale) return@coroutineScope false
         val containerSize =
             containerSize.takeIf { it.isNotEmpty() } ?: return@coroutineScope false
         contentSize.takeIf { it.isNotEmpty() } ?: return@coroutineScope false
@@ -714,6 +721,8 @@ class ZoomableCore constructor(
         val targetScale = transform.scaleX * zoomChange
         val targetUserScale = targetScale / baseTransform.scaleX
         val limitedTargetUserScale = if (rubberBandScale) {
+            limitUserScaleWithRubberBand(targetUserScale)
+        } else if (exceedScale) {
             limitUserScaleWithRubberBand(targetUserScale)
         } else {
             limitUserScale(targetUserScale)

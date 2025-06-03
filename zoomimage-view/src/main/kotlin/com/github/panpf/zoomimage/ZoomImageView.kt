@@ -289,6 +289,12 @@ open class ZoomImageView @JvmOverloads constructor(
                 zoomable.rubberBandScaleState.value = rubberBandScale
             }
 
+            if (array.hasValue(styleable.ZoomImageView_exceedScale)) {
+                val exceedScale =
+                    array.getBoolean(styleable.ZoomImageView_exceedScale, false)
+                zoomable.exceedScaleState.value = exceedScale
+            }
+
             if (array.hasValue(styleable.ZoomImageView_threeStepScale)) {
                 val threeStepScale = array.getBoolean(styleable.ZoomImageView_threeStepScale, false)
                 zoomable.threeStepScaleState.value = threeStepScale
